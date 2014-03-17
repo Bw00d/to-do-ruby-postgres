@@ -68,11 +68,11 @@ describe List do
 	end
 
 	it 'lets you save lists to the database' do
-		list = Lit.new('learn SQL')
+		list = List.new('learn SQL')
 		list.save
 		List.all.should eq [list]
 	end
-	
+
 end
 
 
