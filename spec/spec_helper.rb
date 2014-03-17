@@ -1,10 +1,14 @@
+require 'rspec'
+require 'pg'
+require 'list'
+require 'task'
+
+DB = PG.connect(:dbname => 'to_do_test')
+
 RSpec.configure do |config|
- # Use color in STDOUT
-   config.color_enabled = true
-
- # Use color not only in STDOUT but also in pagers and files
-   config.tty = true
-
- # Use the specified formatter
-   config.formatter = :documentation # :progress, :html, :textmate
+  config.after(:each) do
+    DB.exec("DELETE FROM lists *;")
+    DB.exec("DELETE FROM tasks *;")
+  end
 end
+

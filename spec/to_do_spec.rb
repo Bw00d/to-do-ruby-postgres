@@ -1,24 +1,13 @@
-require 'task'
-require 'rspec'
-require 'pg'
-require 'list'
-
-DB = PG.connect(:dbname => 'to_do_test')
-
-RSpec.configure do |config|
-	config.after(:each) do
-		DB.exec("DELETE FROM tasks *;")
-	end
-end
+require 'spec_helper'
 
 describe Task do
 	it 'is initialized with a name' do
-		task = Task.new('learn SQL')
+		task = Task.new('learn SQL', 1)
 		task.should be_an_instance_of Task
 	end
 
 	it 'tells you its name' do
-		task = Task.new('learn SQL')
+		task = Task.new('learn SQL', 1)
 		task.name.should eq 'learn SQL'
 	end
 
@@ -27,23 +16,18 @@ describe Task do
 	end
 
 	it 'lets you save tasks to the database' do
-		task = Task.new('learn SQL')
+		task = Task.new('learn SQL', 1)
 		task.save
 		Task.all.should eq [task]
 	end
 
 	it 'is the same task if it has the same name' do
-		task1 = Task.new('learn SQL')
-		task2 = Task.new('learn SQL')
+		task1 = Task.new('learn SQL', 1)
+		task2 = Task.new('learn SQL', 1)
 		task1.should eq task2
 	end
 end
 
-RSpec.configure do |config|
-	config.after(:each) do
-		DB.exec("DELETE FROM lists *;")
-	end
-end
 
 describe List do
 	it 'is initialized with a name' do
@@ -58,8 +42,8 @@ describe List do
 	end
 
 	it 'is the same list if it has the same name' do
-		list1 = List.new('Epicodus stuff')
-		list2 = List.new('Epicodus stuff')
+		list1 = List.new('Epicodus stuff', 1)
+		list2 = List.new('Epicodus stuff', 1)
 		list1.should eq list2
 	end
 
@@ -72,6 +56,18 @@ describe List do
 		list.save
 		List.all.should eq [list]
 	end
+
+	it 'sets its ID when you save it' do
+		list = List.new('learn SQL')
+		list.save
+		list.id.should be_an_instance_of Fixnum
+	end
+
+	it 'can be initialized with it database ID' do
+		list = List.new('Epicodus stuff', 1)
+		list.should be_an_instance_of List
+	end
+
 
 end
 
