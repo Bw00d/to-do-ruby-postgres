@@ -1,9 +1,10 @@
 class List
 
-  attr_reader :id
+  attr_reader :id, :tasks
 	def initialize(name, id=nil)
 		@name = name
     @id = id
+    @tasks = tasks
 	end
 
 	def name
@@ -28,6 +29,16 @@ class List
 
   def ==(another_list)
     self.name == another_list.name && self.id == another_list.id
+  end
+
+  def self.tasks(list_id)
+    results = DB.exec("SELECT * FROM tasks WHERE list_id = #{list_id};")
+    tasks = []
+    results.each do |result|
+      name = result['name']
+      tasks << Task.new(result)
+    end
+    tasks
   end
 end
 

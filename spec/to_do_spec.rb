@@ -68,6 +68,12 @@ describe List do
 		list.should be_an_instance_of List
 	end
 
+	it 'returns the tasks associated with a list id' do
+			list = List.new("This is awesome", 1)
+			task1 = Task.new('say hi', 1)
+			task2 = Task.new('make a program', 1)
+			list.tasks(1).should eq [task1, task2]
+		end
 
 end
 
